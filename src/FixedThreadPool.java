@@ -5,6 +5,8 @@ public class FixedThreadPool  implements ThreadPool{
     private final Thread[] threads;
     private final ArrayDeque<Runnable> queue = new ArrayDeque<>();
     private final Object lockWait = new Object();
+    private int c;
+    private boolean flag = true;
 
     public FixedThreadPool(int countTreads) {
         this.countTreads = countTreads;
@@ -21,6 +23,8 @@ public class FixedThreadPool  implements ThreadPool{
 
     @Override
     public void execute(Runnable runnable) {
+        c++;
+        flag = false;
         synchronized (lockWait) {
             queue.add(runnable);
             lockWait.notify();
@@ -31,17 +35,22 @@ public class FixedThreadPool  implements ThreadPool{
         @Override
         public void run() {
             synchronized (lockWait) {
-                while (queue.peek() == null) {
-                    System.out.println("поток ждет");
-                    try {
-                        lockWait.wait();
-                    } catch (InterruptedException e) {
-                        System.out.println("Thread.currentThread().interrupt(); //правильна обработка этого исключения, пока мало понимаю");
-                        System.out.println("log.debug(); //правильна обработка этого исключения, пока мало понимаю");
-                        e.printStackTrace();
+                while (flag || c != 0) {
+                    if (queue.peek() == null ) {
+                        System.out.println("поток ждет");
+                        try {
+                            lockWait.wait();
+                        } catch (InterruptedException e) {
+                            System.out.println("Thread.currentThread().interrupt(); //правильна обработка этого исключения, пока мало понимаю");
+                            System.out.println("log.debug(); //правильна обработка этого исключения, пока мало понимаю");
+                            e.printStackTrace();
+                        }
+                    }
+                    else {
+                        queue.poll().run();
+                        c--;
                     }
                 }
-                queue.poll().run();
             }
         }
     }

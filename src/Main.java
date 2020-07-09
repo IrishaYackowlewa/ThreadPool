@@ -1,7 +1,7 @@
 public class Main {
 
     public static void main(String[] args) {
-        FixedThreadPool fixedThreadPool = new FixedThreadPool(3);
+        FixedThreadPool fixedThreadPool = new FixedThreadPool(5);
         fixedThreadPool.start();
         fixedThreadPool.execute(()->System.out.println("Задача 1"));
         fixedThreadPool.execute(()->System.out.println("Задача 2"));
@@ -16,5 +16,9 @@ public class Main {
         fixedThreadPool.execute(()->System.out.println("Задача 11"));
         fixedThreadPool.execute(()->System.out.println("Задача 12"));
         fixedThreadPool.execute(()->System.out.println("Задача 13"));
+        fixedThreadPool.execute(()->System.out.println("Задача 14"));
+        fixedThreadPool.execute(()->System.out.println("Задача 15"));
+        fixedThreadPool.execute(()->System.out.println("Задача 16"));
+        fixedThreadPool.execute(()->System.out.println("Задача 17"));
     }
 }
