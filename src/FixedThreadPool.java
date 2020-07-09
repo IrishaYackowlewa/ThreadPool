@@ -34,8 +34,8 @@ public class FixedThreadPool  implements ThreadPool{
     private class RunThread implements Runnable {
         @Override
         public void run() {
-            synchronized (lockWait) {
-                while (flag || c != 0) {
+            while (flag || c != 0) {
+                synchronized (lockWait) {
                     if (queue.peek() == null ) {
                         System.out.println("поток ждет");
                         try {
